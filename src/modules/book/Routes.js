@@ -10,9 +10,9 @@ const router = Router();
 
 router.post('/', create);
 router.post('/search', search);
-router.get('/:baseId', getById);
-router.patch('/:baseId', updateById);
-router.delete('/:baseId', deleteById);
+router.get('/:bookId', getById);
+router.patch('/:bookId', updateById);
+router.delete('/:bookId', deleteById); //localhost:5000/book/указать ID
 router.delete('/', deleteAll);
 
 export default router;

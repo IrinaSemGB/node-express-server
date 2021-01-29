@@ -1,6 +1,6 @@
 import Base from './Model';
 
-export default function getAll(req, res) {
+export default function search(req, res) {
   Base.find()
     .exec()
     .then((result) => {
