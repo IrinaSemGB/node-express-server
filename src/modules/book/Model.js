@@ -8,13 +8,21 @@ const Model = new Schema(
       type: String,
       required: true,
     },
-    author: [
+    authors: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Author',
         required: false,
       },
     ],
+    purchasePrice: {
+      type: Number,
+      required: true,
+    },
+    sellingPrice: {
+      type: Number,
+      required: true,
+    },
   },
 
   { timestamps: {} },

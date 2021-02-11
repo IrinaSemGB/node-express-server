@@ -1,7 +1,7 @@
 import Author from './Model';
 
 export default function getById(req, res) {
-  const authorId = req.params.authorId;
+  const authorId = req.params.authors;
 
   Author.findById(authorId)
     .exec()

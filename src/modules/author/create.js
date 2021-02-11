@@ -2,33 +2,39 @@ import Author from './Model';
 import Book from '../book/Model';
 import mongoose from 'mongoose';
 
-export default function create(req, res) {
-  const _id = new mongoose.Types.ObjectId();
-  const newAuthor = new Author({
-    name: req.body.name,
-    book: req.body.book,
-  });
+export default async function create(req, res) {
+  const newAuthorId = new mongoose.Types.ObjectId();
+  const books = req.body.books;
+  const newBooks = [];
 
-  //Update book
-  req.body.book.forEach((book) => {
-    Book.findById({ _id: book })
+  // Update books
+  const promisesAuthorGetById = books.map((book) =>
+    Book.findByIdAndUpdate(book, { $addToSet: { authors: newAuthorId } })
       .exec()
-      .then((doc) => {
-        console.log(doc);
-
-        doc.author = [...doc.author, _id];
-        doc.save().catch((e) => {
-          throw new Error(e);
-        });
-        //res.status(200).json(doc.book);
+      .then((result) => {
+        if (result) {
+          newBooks.push(book);
+          console.log(`Book ${book} was created`);
+        } else {
+          console.log(`Book ${book} was not created`);
+        }
       })
       .catch((err) => {
         console.log(err);
         res.status(400).json('Book update error');
-      });
-  });
+      }),
+  );
+
+  const promiseResults = await Promise.all(promisesAuthorGetById);
+  console.log(promiseResults);
 
   // Create Author
+  const newAuthor = new Author({
+    _id: newAuthorId,
+    name: req.body.name,
+    books: newBooks,
+  });
+
   newAuthor
     .save()
     .then(() => {

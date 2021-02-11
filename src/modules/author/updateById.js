@@ -1,7 +1,7 @@
 import Author from './Model';
 
 export default function updateById(req, res) {
-  const authorId = req.params.authorId;
+  const authorId = req.params.authors;
 
   Author.findByIdAndUpdate(authorId, req.body)
     .populate('book.list')
