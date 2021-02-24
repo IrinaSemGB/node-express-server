@@ -3,15 +3,13 @@ import Author from '../author/Model';
 import mongoose from 'mongoose';
 
 export default async function create(req, res) {
-  const newBookId = new mongoose.Types.ObjectId();
+  const _id = new mongoose.Types.ObjectId();
   const authors = req.body.authors;
-  const purchasePrice = req.body.purchasePrice;
-  const sellingPrice = req.body.sellingPrice;
   const newAuthors = [];
 
   // Update Authors
   const promisesBookGetById = authors.map((author) =>
-    Author.findByIdAndUpdate(author, { $addToSet: { books: newBookId } })
+    Author.findByIdAndUpdate(author, { $addToSet: { books: _id } })
       .exec()
       .then((result) => {
         if (result) {
@@ -32,11 +30,11 @@ export default async function create(req, res) {
 
   // Create Book
   const newBook = new Book({
-    _id: newBookId,
+    _id: _id,
     name: req.body.name,
     authors: newAuthors,
-    purchasePrice: purchasePrice,
-    sellingPrice: sellingPrice,
+    purchasePrice: req.body.purchasePrice,
+    sellingPrice: req.body.sellingPrice,
   });
 
   newBook
