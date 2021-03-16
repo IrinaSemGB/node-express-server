@@ -4,6 +4,8 @@ import Author from '../author/Model';
 export default async function deleteById(req, res) {
   const { bookId = '' } = req.params;
 
+  console.log(res.body);
+
   Book.findById(bookId)
     .exec()
     .then((result) => {
@@ -14,15 +16,21 @@ export default async function deleteById(req, res) {
           { runValidators: true },
         )
           .exec()
-          .then((result) => result)
+          .then((result) => {
+            if (result) {
+              console.log('delete book author updated');
+            } else {
+              console.log('delete book author NOT updated');
+            }
+          })
           .catch((error) => {
             console.log(error);
           });
       });
-      res.status(200).json(result);
     })
     .catch((err) => {
-      res.status(400).json('Book get by id error' + err);
+      console.log(err);
+      res.status(400).json('Author get by id error ' + err);
     });
 
   Book.deleteOne({ _id: bookId })
